@@ -11,45 +11,45 @@ Serpico是一个生成渗透测试报告和合作的工具。它是为了减少�
 ##安装
 Serpico是使用Ruby编写的，用到了sinatra，Bootstrap和haml，安装应该很简单：
 
--你需要一个Ruby版本，Rvm是Ruby版本控制工具，需要Ruby2.1.5版本的支持，rvm官网https://rvm.io/rvm/install，如果遇到权限问题，可以使用sudo命令
+- 你需要一个Ruby版本，Rvm是Ruby版本控制工具，需要Ruby2.1.5版本的支持，rvm官网https://rvm.io/rvm/install，如果遇到权限问题，可以使用sudo命令
 
------
+```
 curl -sSL https://get.rvm.io | bash  
 rvm install 2.1.5
 rvm use 2.1.5
------
+```
 
--如果你是在Ubuntu（或者在Kali上验证）上运行的，你将会需要下列依赖
+- 如果你是在Ubuntu（或者在Kali上验证）上运行的，你将会需要下列依赖
 
------
+```
 apt-get install libsqlite3-dev libxslt-dev libxml2-dev zlib1g-dev gcc
------
+```
 
--进入Serpoco 目录然后安装proper gems:
+- 进入Serpoco 目录然后安装proper gems:
 
------
+```
 cd Serpico
 gem install bundler
 bundle install 
------
+```
 
 - 第一次需要运行初始化脚本,会初始化管理员密码
 
------
+```
 ruby scripts/first_time.rb
------
+```
 
 - 启动Serpico
 
------
+```
 ruby serpico.rb
------
+```
 
 - 原版问题在管理员登录了几次之后密码失效，所以需要下列脚本来重置密码
 
------
+```
 ruby script/reset_pw.rb
------
+```
 
 注意：首先会产生一个新的证书然后使用它，为额你自己能使用，需要把它用加到root目录里面
 打开你的浏览器输入https://127.0.0.1:8443（或者你自己定义的端口） 然后开始使用
