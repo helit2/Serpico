@@ -3,14 +3,14 @@
   - if @newfinding
     %h2 Finding(s) Added! You rock.
   %br
-    %h3 Current Findings
+    %h3 当前渗透测试结果
     %br
     .table
       %table{:style => 'width: 90%'}
         %tbody
           - if @findings
             - if @master
-              %input{:type => "text", :class=>"form-control", :placeholder=>"Finding Name Search", :id=>"search"}
+              %input{:type => "text", :class=>"form-control", :placeholder=>"漏洞名搜索", :id=>"search"}
               %style{:id => "search_style" }
               %span{:class=>"input-group-btn"}
               %script{:type=>"text/javascript"}

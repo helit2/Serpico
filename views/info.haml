@@ -1,32 +1,32 @@
 .span10
   %form{:method => 'post'}
     %br
-    %h2 Consultant Information
+    %h2 咨询信息
     %br
     %table
       %tr
         %td
-          Consultant Name &nbsp;
+          顾问名称 &nbsp;
         %td
           %input{:type => 'text', :name => 'name', :value=> "#{@user.consultant_name}"}
       %tr
         %td
-          Email &nbsp;
+          邮件 &nbsp;
         %td
           %input{:type => 'text', :name => 'email', :value => "#{@user.consultant_email}"}
       %tr
         %td
-          Phone &nbsp;
+          电话 &nbsp;
         %td
           %input{:type => 'text', :name => 'phone', :value => "#{@user.consultant_phone}"}
       %tr
         %td
-          Title &nbsp;
+          职位 &nbsp;
         %td
           %input{:type => 'text', :name => 'title', :value => "#{@user.consultant_title}"}
           
     %br
-    %input{:type => 'submit', :value => 'Save' }
-    %button{:value => 'Cancel'} Cancel
+    %input{:type => 'submit', :value => '保存' }
+    %button{:value => 'Cancel'} 取消
   
       

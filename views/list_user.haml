@@ -1,6 +1,6 @@
 .span10
   %br
-    %h3 Current Users
+    %h3 当前用户
     %br  
     .table.table-striped
       %table{:style => 'width: 40%'}
@@ -9,12 +9,12 @@
             %tr
               %td{ :style => 'width: 30%' }
                 %b
-                  Username
+                  用户名
               %td{ :style => 'width: 30%' }
                 %b
-                  Level/Authentication Type
+                  角色/认证类型
               %td{:style => 'width: 40%'}
-                Actions      
+                操作      
             - @users.each do |user|
               %tr
                 %td{ :style => 'width: 30%' }
@@ -27,4 +27,4 @@
                   %a{ :class => "btn btn-warning", :href => "/admin/edit_user/#{user.id}"}
                     %i{:class => 'icon-pencil icon-white', :title => 'Edit Password'}
           - else
-            No Users. How Curious. Who are you?
+            没有用户，我很好奇，你是谁？

@@ -1,28 +1,28 @@
 .span10
   %form{:method => 'post'}
     %br
-    %h2 Create Report (or <a href="/report/import">Import</a>)
+    %h2 新建报告 (或 <a href="/report/import">导入</a>)
     %br
     - if @templates.size > 0
       %table
         %tr
           %td
-            Title &nbsp;
+            标题 &nbsp;
           %td
             %input{:type => 'text', :name => 'report_name'}
         %tr
           %td
-            Full Company Name &nbsp;
+            公司全称 &nbsp;
           %td
             %input{:type => 'text', :name => 'full_company_name'}
         %tr
           %td
-            Short Company Name &nbsp;
+            公司简称 &nbsp;
           %td
             %input{:type => 'text', :name => 'short_company_name'}
         %tr
           %td{:style => 'width: 30%'}
-            Report Type
+            报告类型
           %td{:style => 'width: 70%'}
             %select{ :name => "report_type" }
               - @templates.each do |template|
@@ -32,9 +32,9 @@
                   - else
                     %option #{template.report_type}
       %br
-      %input{:type => 'submit', :value => 'Save' }
-      %button{:value => 'Cancel'} Cancel
+      %input{:type => 'submit', :value => '保存' }
+      %button{:value => 'Cancel'} 取消
     - else
       %h4
-        Hrm, there don't seem to be any report templates. An admin will need to <a href="/admin/templates/add">add</a> one -_-
+        额，现在没有报告模板，需要管理员去 <a href="/admin/templates/add">添加</a> 一个 -_-
       

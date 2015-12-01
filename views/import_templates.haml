@@ -1,13 +1,13 @@
 .span10
   %form{:method => 'post', :enctype=>"multipart/form-data"}
     %br
-    %h2 Upload Templated Findings
+    %h2 上传漏洞模板
     %br
     %table
       %tr
       %tr
         %td
-          Upload JSON File - Please be careful. This must have been exported from the UI.&nbsp;
+          上传 JSON 文件 - Please be careful. 这必须从UI导入.&nbsp;
           %br
           %br
           %input{:type => 'file', :name => 'file'}
@@ -16,10 +16,10 @@
           %br
           &nbsp;&nbsp;&nbsp;
           %input{:type => 'checkbox', :name => 'approved'}
-          Automatically Approve Imported Findings. By default you should manually approve findings, this overrides that.
+          自动批准导入漏洞模板. 默认情况下你应该手动审核, 这会覆盖.
     %br
     %br
-    %input{:type => 'submit', :value => 'Upload' }
-    %button{:value => 'Cancel'} Cancel
+    %input{:type => 'submit', :value => '上传' }
+    %button{:value => 'Cancel'} 取消
 
 

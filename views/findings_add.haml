@@ -7,9 +7,9 @@
         %h4 
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The following findings were automatically selected to be added to your report.
       - else
-        %h3 Templated Findings
+        %h3 漏洞模板
         %h4 
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add findings from the template database to your report.
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 从模板中添加渗透测试结果.
       %br
       &nbsp;
       %input{:type => "text", :class=>"form-control", :placeholder=>"Finding Name Search", :id=>"search"}
@@ -78,8 +78,8 @@
                                   - else
                                     %a{ :class => "btn btn-info", :href => "/master/findings/#{finding.id}/preview"}
                                       %i{:class => 'icon-play-circle icon-white', :title => 'Preview'}
-        %input{ :type => "submit", :value => 'Add' }
+        %input{ :type => "submit", :value => '添加' }
         %a{ :href => "/report/#{@report.id}/findings"}
-          %input{ :type => "button", :value => 'Cancel'}
+          %input{ :type => "button", :value => '取消'}
     - else
-      No Findings Available
+      没有发现漏洞模板

@@ -5,14 +5,14 @@
     %br
     - if @templates.size > 0
       %h4
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Modify the information that will appear in the report.
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;修改下列信息将会出现在报告中.
       %br
       .table.table-striped
         %table{:style => 'width: 70%'}
           %tbody
             %tr
               %td{:style => 'width: 30%'}
-                Report Type
+                报告类型
               %td{:style => 'width: 70%'}
                 %select{ :name => "report_type" }
                   - @templates.each do |template|
@@ -23,68 +23,68 @@
                         %option #{template.report_type}
             %tr
               %td{:style => 'width: 30%'}
-                Title
+                标题
               %td{:style => 'width: 70%'}
                 %input{:type => 'text', :style => 'width: 90%', :name => 'report_name', :value => "#{@report.report_name}"}
             %tr
               %td{:style => 'width: 30%'}
-                Full Company Name
+                公司全称
               %td{:style => 'width: 70%'}
                 %input{:type => 'text', :style => 'width: 90%', :name => 'full_company_name', :value => "#{@report.full_company_name}"}
             %tr
               %td{:style => 'width: 30%'}
-                Short Company Name
+                公司简称
               %td{:style => 'width: 70%'}
                 %input{:type => 'text', :style => 'width: 90%', :name => 'short_company_name', :value => "#{@report.short_company_name}"}
             %tr
               %td{:style => 'width: 30%'}
-                Company Website
+                公司主要
               %td{:style => 'width: 70%'}
                 %input{:type => 'text', :style => 'width: 90%', :name => 'company_website', :value => "#{@report.company_website}"}
             %tr
               %td{:style => 'width: 30%'}
-                Company Address
+                公司地址
               %td{:style => 'width: 70%'}
                 %input{:type => 'text', :style => 'width: 90%', :name => 'contact_address', :value => "#{@report.contact_address}"}
             %tr
               %td{:style => 'width: 30%'}
-                Company City
+                城市
               %td{:style => 'width: 70%'}
                 %input{:type => 'text', :style => 'width: 90%', :name => 'contact_city', :value => "#{@report.contact_city}"}
             %tr
               %td{:style => 'width: 30%'}
-                State
+                省份
               %td{:style => 'width: 70%'}
                 %input{:type => 'text', :style => 'width: 90%', :name => 'contact_state', :value => "#{@report.contact_state}"}
             %tr
               %td{:style => 'width: 30%'}
-                Company Zip
+                公司邮编
               %td{:style => 'width: 70%'}
                 %input{:type => 'text', :style => 'width: 90%', :name => 'contact_zip', :value => "#{@report.contact_zip}"}
             %tr
               %td{:style => 'width: 30%'}
-                Contact Name
+                联系人姓名
               %td{:style => 'width: 70%'}
                 %input{:type => 'text', :style => 'width: 90%', :name => 'contact_name', :value => "#{@report.contact_name}"}
             %tr
               %td{:style => 'width: 30%'}
-                Contact E-Mail
+                邮件地址
               %td{:style => 'width: 70%'}
                 %input{:type => 'text', :style => 'width: 90%', :name => 'contact_email', :value => "#{@report.contact_email}"}
             %tr
               %td{:style => 'width: 30%'}
-                Contact Title
+                联系人职位
               %td{:style => 'width: 70%'}
                 %input{:type => 'text', :style => 'width: 90%', :name => 'contact_title', :value => "#{@report.contact_title}"}
             %tr
               %td{:style => 'width: 30%'}
-                Contact Phone
+                联系电话
               %td{:style => 'width: 70%'}
                 %input{:type => 'text', :style => 'width: 90%', :name => 'contact_phone', :value => "#{@report.contact_phone}"}
       %br
       %input{:type => 'hidden', :name => 'id', :value => "#{@report.id}"}
-      %input{:type => 'submit', :value => 'Save'}
-      %button{:value => 'Cancel'} Cancel
+      %input{:type => 'submit', :value => '保存'}
+      %button{:value => 'Cancel'} 取消
     - else
       %h3
         Hrm, there don't seem to be any report templates. An admin will need to <a href="/admin/templates/add">add</a> one -_-

@@ -4,3 +4,5 @@ key.pem
 tmp/*
 templates/*
 attachments/*
+public/img/*
+public/reveal.js/*

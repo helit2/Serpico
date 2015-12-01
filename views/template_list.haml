@@ -1,6 +1,6 @@
 .span10
   %br
-    %h3 Current Templates
+    %h3 当前模板
     %br  
     .table.table-striped
       %table{:style => 'width: 80%'}
@@ -9,13 +9,13 @@
             %tr
               %td{ :style => 'width: 30%' }
                 %b
-                  Report Type
+                  报告类型
               %td{ :style => 'width: 30%' }
                 %b
-                  Description 
+                  描述 
               %td{ :style => 'width: 30%' }
                 %b
-                  Template Type
+                  模板类型
               %td{ :style => 'width: 10%' }
                 %b
             - @templates.each do |template|
@@ -26,11 +26,11 @@
                   #{template.description}
                 %td{:style => 'width: 15%'}
                   - if template.finding_template
-                    Finding Template
+                    漏洞模板
                   - elsif template.status_template
-                    Status Template
+                    状态模板
                   - else
-                    Report Template
+                    报告模板
                 %td{:style => 'width: 60%'}
                   %a{:class => 'btn btn-info', :href => "/admin/templates/#{template.id}/edit"}
                     %i{:class => 'icon-pencil icon-white', :title => 'Edit'}
@@ -39,4 +39,4 @@
                   %a{:class => 'btn btn-info', :href => "/admin/templates/#{template.id}/download"}
                     %i{:class => 'icon-play-circle icon-white', :title => 'Preview'}
           - else
-            No Templates. Silly goose, how will you create reports?
+            没有模板，傻鹅，你要创建新的模板吗？
