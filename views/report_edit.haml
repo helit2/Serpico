@@ -38,49 +38,60 @@
                 %input{:type => 'text', :style => 'width: 90%', :name => 'short_company_name', :value => "#{@report.short_company_name}"}
             %tr
               %td{:style => 'width: 30%'}
-                公司主要
+                报告时间
               %td{:style => 'width: 70%'}
-                %input{:type => 'text', :style => 'width: 90%', :name => 'company_website', :value => "#{@report.company_website}"}
+                %input{:type => 'text', :style => 'width: 90%', :name => 'date', :value => "#{@report.date}"}
             %tr
               %td{:style => 'width: 30%'}
-                公司地址
+                作者
               %td{:style => 'width: 70%'}
-                %input{:type => 'text', :style => 'width: 90%', :name => 'contact_address', :value => "#{@report.contact_address}"}
+                %input{:type => 'text', :style => 'width: 90%', :name => 'authors', :value => "#{@report.authors}"}
             %tr
               %td{:style => 'width: 30%'}
-                城市
+                测试模块名称
               %td{:style => 'width: 70%'}
-                %input{:type => 'text', :style => 'width: 90%', :name => 'contact_city', :value => "#{@report.contact_city}"}
+                %input{:type => 'text', :style => 'width: 90%', :name => 'module_name', :value => "#{@report.module_name}"}
             %tr
               %td{:style => 'width: 30%'}
-                省份
+                测试地址
               %td{:style => 'width: 70%'}
-                %input{:type => 'text', :style => 'width: 90%', :name => 'contact_state', :value => "#{@report.contact_state}"}
+                %input{:type => 'text', :style => 'width: 90%', :name => 'pentest_address', :value => "#{@report.pentest_address}"}
             %tr
               %td{:style => 'width: 30%'}
-                公司邮编
+                开始时间
               %td{:style => 'width: 70%'}
-                %input{:type => 'text', :style => 'width: 90%', :name => 'contact_zip', :value => "#{@report.contact_zip}"}
+                %input{:type => 'text', :style => 'width: 90%', :name => 'start_time', :value => "#{@report.start_time}"}
             %tr
               %td{:style => 'width: 30%'}
-                联系人姓名
+                结束时间
               %td{:style => 'width: 70%'}
-                %input{:type => 'text', :style => 'width: 90%', :name => 'contact_name', :value => "#{@report.contact_name}"}
+                %input{:type => 'text', :style => 'width: 90%', :name => 'end_time', :value => "#{@report.end_time}"}
             %tr
               %td{:style => 'width: 30%'}
-                邮件地址
+                安全评价
               %td{:style => 'width: 70%'}
-                %input{:type => 'text', :style => 'width: 90%', :name => 'contact_email', :value => "#{@report.contact_email}"}
+                %input{:type => 'text', :style => 'width: 90%', :name => 'safety_evaluation', :value => "#{@report.safety_evaluation}"}   
             %tr
               %td{:style => 'width: 30%'}
-                联系人职位
+                总体影响
               %td{:style => 'width: 70%'}
-                %input{:type => 'text', :style => 'width: 90%', :name => 'contact_title', :value => "#{@report.contact_title}"}
+                %input{:type => 'text', :style => 'width: 90%', :name => 'total_effort', :value => "#{@report.total_effort}"}
             %tr
               %td{:style => 'width: 30%'}
-                联系电话
+                高危漏洞数
               %td{:style => 'width: 70%'}
-                %input{:type => 'text', :style => 'width: 90%', :name => 'contact_phone', :value => "#{@report.contact_phone}"}
+                %input{:type => 'text', :style => 'width: 90%', :name => 'high_risk_num', :value => "#{@report.high_risk_num}"}
+            %tr
+              %td{:style => 'width: 30%'}
+                中危漏洞数
+              %td{:style => 'width: 70%'}
+                %input{:type => 'text', :style => 'width: 90%', :name => 'moderate_risk_num', :value => "#{@report.moderate_risk_num}"}
+            %tr
+              %td{:style => 'width: 30%'}
+                低位漏洞数
+              %td{:style => 'width: 70%'}
+                %input{:type => 'text', :style => 'width: 90%', :name => 'low_risk_num', :value => "#{@report.low_risk_num}"}
+
       %br
       %input{:type => 'hidden', :name => 'id', :value => "#{@report.id}"}
       %input{:type => 'submit', :value => '保存'}

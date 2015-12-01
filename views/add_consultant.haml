@@ -1,0 +1,34 @@
+.span10
+  %form{:method => 'post', :action => '/admin/add_consultant'}
+    %br
+    %h2 添加/修改渗透测试人员
+    %br
+    %table
+      %tr
+        %td
+          顾问名称 &nbsp;
+        %td
+          - if @user
+            %input{:type => 'text', :name => 'username', :value => "#{@user.username}"}
+          - else
+            %input{:type => 'text', :name => 'username'}
+      %tr
+        %td
+          邮件
+        %td
+          %input{:type => 'text', :name => 'email'}
+      %tr
+        %td
+          电话
+        %td
+          %input{:type => 'text', :name => 'phone'}
+      %tr
+        %td
+          职位
+        %td
+          %input{:type => 'text', :name => 'title'}
+    %br
+    %input{:type => 'submit', :value => '修改' }
+    %button{:value => 'Cancel'} 取消
+  
+      

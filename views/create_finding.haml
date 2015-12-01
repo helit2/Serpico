@@ -56,13 +56,20 @@
             %option HARD
     - else
       .control-group
-        %label{ :class => "control-label", :for => "risk" } 风险等级
+        %label{ :class => "control-label", :for => "risk" } 风险评分  注：暂时没用
         .controls
           %select{ :name => "risk" }
             %option{:value => 1}= "Low"
             %option{:value => 2}= "Moderate"
             %option{:value => 3}= "High"
             %option{:value => 4}= "Critical"
+      .control-group
+        %label{ :class => "control-label", :for => "risk2" } 漏洞风险等级
+        .controls
+          %select{ :name => "risk2" }
+            %option{:value => 1}= "轻度"
+            %option{:value => 2}= "中度"
+            %option{:value => 3}= "严重"
     .control-group
       %label{ :class => "control-label", :for => "overview" }
         %a{:href=> '#mymodal', "data-toggle"=>'modal', :class=>'btn btn-info'}
@@ -124,6 +131,10 @@
         %label{ :class => "control-label", :for => "affected_hosts" } 影响主机
         .controls
           %textarea{ :rows => '10', :class => 'input-xxlarge', :id => 'affected_hosts', :name => 'affected_hosts'}
+    .control-group
+      %label{ :class => "control-label", :for => "risk_assessment" } 风险分析
+      .controls
+        %textarea{ :rows => '10', :class => 'input-xxlarge', :id => 'risk_assessment', :name => 'risk_assessment'}
     .control-group
       %label{ :class => "control-label", :for => "remediation" } 整改建议
       .controls
