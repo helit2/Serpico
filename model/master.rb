@@ -27,6 +27,7 @@ class TemplateFindings
     property :approved, Boolean, :required => false, :default => true
     property :risk, Integer, :required => false
     property :affected_hosts, String, :length => 20000, :required => false
+    property :risk_assessment, String, :length => 100000, :required => false
 
 end
 
@@ -53,9 +54,11 @@ class Findings
     property :assessment_type, String, :required => false
     property :references, String, :length => 20000, :required => false
     property :risk, Integer, :required => false
+    property :risk2, String , :length => 20, :required => false
     property :affected_hosts, String, :length => 1000000, :required => false
     property :presentation_points, String, :length => 100000, :required => false
     property :presentation_rem_points, String, :length => 100000, :required => false
+    property :risk_assessment, String, :length => 100000, :required => false
 
 end
 
@@ -193,8 +196,17 @@ class Reports
     property :short_company_name, String, :length => 200
     property :company_website, String, :length => 200
     property :owner, String, :length => 200
-    property :authors, CommaSeparatedList, :required => false, :lazy => false
+    property :authors,  String , :length => 20
     property :user_defined_variables, String, :length => 10000
+    property :module_name, String, :length => 200
+    property :pentest_address, String, :length => 200
+    property :start_time, String, :length => 200
+    property :end_time, String, :length => 200
+    property :safety_evaluation, String , :length => 200
+    property :high_risk_num, String , :length => 20
+    property :moderate_risk_num, String , :length => 20
+    property :low_risk_num, String , :length => 20
+    property :total_effort, String , :length => 200
 
 end
 
@@ -217,6 +229,7 @@ class Hosts
     property :port, String
 
 end
+
 
 class Xslt
     include DataMapper::Resource

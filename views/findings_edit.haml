@@ -103,7 +103,7 @@
           %input{ :type => 'number', :min => '1', :max => '10', :name => 'discoverability', :value => "#{@finding.discoverability}", :required => true}
     - else
       .control-group
-        %label{ :class => "control-label", :for => "risk" } 漏洞风险等级
+        %label{ :class => "control-label", :for => "risk" } 漏洞风险评分等级 注：暂时没用
         .controls
           %select{ :name => "risk" }
             - risk_types = ["None", "Low", "Moderate", "High", "Critical"]
@@ -116,7 +116,14 @@
               - else
                 %option{ :value => "#{r_type}"} #{risk_types[r_type]}
     .control-group
-      %label{ :class => "control-label", :for => "effort" } 修改影响
+      %label{ :class => "control-label", :for => "risk2" } 漏洞风险等级
+      .controls
+        %select{ :name => "risk2" }
+          %option{:value => "轻度"}= "轻度"
+          %option{:value => "中度"}= "中度"
+          %option{:value => "严重"}= "严重"
+    .control-group
+      %label{ :class => "control-label", :for => "effort" } 漏洞影响
       .controls
         %select{ :name => "effort" }
           - options.effort.each do |effort|
@@ -218,6 +225,13 @@
               - if @finding.affected_hosts
                 #{meta_markup(@finding.affected_hosts)}
     .control-group
+      %label{ :class => "control-label", :for => "risk_assessment" } 风险分析
+      .controls
+        %textarea{ :rows => '10', :class => 'input-xxlarge', :id => 'risk_assessment', :name => 'risk_assessment'}
+          - if @finding
+            - if @finding.risk_assessment
+              #{meta_markup(@finding.risk_assessment)}
+    .control-group
       %label{ :class => "control-label", :for => "remediation" } 整改建议
       .controls
         %textarea{ :rows => '10', :class => 'input-xxlarge', :name => 'remediation'}
@@ -233,7 +247,7 @@
               #{meta_markup(@finding.references)}
     - if !@master
       .control-group
-        %label{ :class => "control-label", :for => "notes" } Notes Data
+        %label{ :class => "control-label", :for => "notes" } 备注：
         %i{:class=>"icon-chevron-down", "data-toggle"=>"collapse", "data-target"=>"#info_2", :id=>"actionButton"}
         .info{ :id => "info_2", :class => "collapse out" }
           %label

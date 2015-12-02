@@ -54,11 +54,11 @@
             %ul.nav{"class" => "pull-right padded"}
               - if is_administrator?
                 %li
-                  %a.fa.fa-sitemap{:href => "/master/findings"} &nbsp;风险库
+                  %a.fa.fa-sitemap{:href => "/master/findings"} &nbsp;漏洞库
                 %li
-                  %a.fa.fa-reorder{:href => "/admin/"} &nbsp;管理
+                  %a.fa.fa-reorder{:href => "/admin/"} &nbsp;系统设置
               %li
-                %a.fa.fa-tasks{:href => "/info"} &nbsp;咨询信息
+                %a.fa.fa-tasks{:href => "/info"} &nbsp;个人信息
               %li
                 %a.fa.fa-external-link-square{:href => "/logout"} &nbsp;退出
 
@@ -73,17 +73,17 @@
               %br
               %br
               %ul.nav.nav-list
-                %li.nav-header 风险库菜单
+                %li.nav-header 漏洞库菜单
                 %li
-                  %a{ :href => '/master/findings' } 当前风险库列表
+                  %a{ :href => '/master/findings' } 当前漏洞列表
                 %li
                   %a{ :href => '/master/findings/new' } 添加漏洞
               %ul.nav.nav-list
                 %li.nav-header 数据库操作
                 %li
-                  %a{ :href => '/master/export' } 导出当前风险库
+                  %a{ :href => '/master/export' } 导出当前漏洞库
                 %li
-                  %a{ :href => '/master/import' } 导入风险库
+                  %a{ :href => '/master/import' } 导入漏洞库
             - elsif @admin
               %ul.nav.nav-list
                 %li.nav-header 管理用户菜单
@@ -91,6 +91,11 @@
                   %a{ :href => '/admin/add_user' } 添加用户
                 %li
                   %a{ :href => '/admin/list_user' } 用户列表
+                / %li.nav-header 管理顾问菜单
+                / %li
+                /   %a{ :href => '/admin/add_consultant' } 添加顾问人员
+                / %li
+                /   %a{ :href => '/admin/list_consultant' } 顾问列表
                 %li.nav-header 管理报告模板菜单
                 %li
                   %a{ :href => '/admin/templates/add' } 添加报告模板

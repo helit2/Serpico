@@ -4,7 +4,7 @@
   %table
     %tr
       %td
-        %a{ :href => "/report/#{@report.id}/user_defined_variables"} 编辑用户定义的变量
+        %a{ :href => "/report/#{@report.id}/user_defined_variables"} 编辑用户自定义的变量
     %tr
       %td
         %a{ :href => "/report/#{@report.id}/export" } 导出当前报告 (Warning: 不包括附件)
@@ -28,8 +28,8 @@
         %a{ :href => "/report/#{@report.id}/text_status" } 生成文本状态报告
     %tr
       %td
-        %a{ :href => "/report/#{@report.id}/asciidoc_status" } Generate AsciiDoc of Current Findings (Experimental)
+        %a{ :href => "/report/#{@report.id}/asciidoc_status" }  生成当前漏洞二进制文档（测试）
     %tr
       %td
         %a{ :href => "/report/#{@report.id}/presentation" }
-          生成演示报告
+          报告预览

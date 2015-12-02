@@ -11,14 +11,14 @@
             #{@report.owner}
           %td
             &nbsp;
-        - if @report.authors 
-          - @report.authors.each do |user|
-            %tr
-              %td
-                #{user}
-              %td
-                %a{ :class => "btn btn-danger", :href => "/admin/del_user_report/#{@report.id}/#{user}"}
-                  %i{:class => 'icon-remove icon-white', :title => 'Remove Author'} 
+        / - if @report.authors 
+        /   - @report.authors.each do |user|
+        /     %tr
+        /       %td
+        /         #{user}
+        /       %td
+        /         %a{ :class => "btn btn-danger", :href => "/admin/del_user_report/#{@report.id}/#{user}"}
+        /           %i{:class => 'icon-remove icon-white', :title => 'Remove Author'} 
 
     %br
     %label{ :class => "control-label", :for => "add_collaborator" } 

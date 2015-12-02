@@ -5,12 +5,12 @@
   %br
   %form{ :class => "form-horizontal", :method => 'post', :enctype => 'application/x-www-form-urlencoded'}
     .control-group
-      %label{ :class => "control-label", :for => "title" } 标题
+      %label{ :class => "control-label", :for => "title" } 漏洞名称
       .controls
         %input{ :type => 'text', :name => 'title', :value => ""}
     - if !@master
       .control-group
-        %label{ :class => "control-label", :for => "assessment_type" } Assessment Type
+        %label{ :class => "control-label", :for => "assessment_type" } 评定类型 注：暂时没用
         .controls
           %select{ :name => "assessment_type" }
             - options.assessment_types.each do |type|
@@ -56,13 +56,20 @@
             %option HARD
     - else
       .control-group
-        %label{ :class => "control-label", :for => "risk" } 风险等级
+        %label{ :class => "control-label", :for => "risk" } 风险评分  注：暂时没用
         .controls
           %select{ :name => "risk" }
             %option{:value => 1}= "Low"
             %option{:value => 2}= "Moderate"
             %option{:value => 3}= "High"
             %option{:value => 4}= "Critical"
+      .control-group
+        %label{ :class => "control-label", :for => "risk2" } 漏洞风险等级
+        .controls
+          %select{ :name => "risk2" }
+            %option{:value => 1}= "轻度"
+            %option{:value => 2}= "中度"
+            %option{:value => 3}= "严重"
     .control-group
       %label{ :class => "control-label", :for => "overview" }
         %a{:href=> '#mymodal', "data-toggle"=>'modal', :class=>'btn btn-info'}
@@ -125,6 +132,10 @@
         .controls
           %textarea{ :rows => '10', :class => 'input-xxlarge', :id => 'affected_hosts', :name => 'affected_hosts'}
     .control-group
+      %label{ :class => "control-label", :for => "risk_assessment" } 风险分析
+      .controls
+        %textarea{ :rows => '10', :class => 'input-xxlarge', :id => 'risk_assessment', :name => 'risk_assessment'}
+    .control-group
       %label{ :class => "control-label", :for => "remediation" } 整改建议
       .controls
         %textarea{ :rows => '10', :class => 'input-xxlarge', :name => 'remediation'}
@@ -134,7 +145,7 @@
         %textarea{ :rows => '5', :class => 'input-xxlarge', :name => 'references'}
     - if !@master
       .control-group
-        %label{ :class => "control-label", :for => "notes" } Notes
+        %label{ :class => "control-label", :for => "notes" } 备注
         .controls
           %textarea{ :rows => '10', :class => 'input-xxlarge', :id => 'notes', :name => 'notes'}
 

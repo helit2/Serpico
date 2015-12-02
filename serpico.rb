@@ -1,4 +1,4 @@
-# encoding: utf-8
+# encoding: ASCII-8BIT
 require 'rubygems'
 require 'bundler/setup'
 require 'sinatra'
@@ -137,25 +137,25 @@ post '/login' do
 
         end
     elsif user
-		if options.ldap
-			#try AD authentication
-			usern = params[:username]
-			data = url_escape_hash(request.POST)
+        if options.ldap
+            #try AD authentication
+            usern = params[:username]
+            data = url_escape_hash(request.POST)
             if usern == "" or params[:password] == ""
                 redirect to("/")
             end
 
-			user = "#{options.domain}\\#{data["username"]}"
-			ldap = Net::LDAP.new :host => "#{options.dc}", :port => 636, :encryption => :simple_tls, :auth => {:method => :simple, :username => user, :password => params[:password]}
+            user = "#{options.domain}\\#{data["username"]}"
+            ldap = Net::LDAP.new :host => "#{options.dc}", :port => 636, :encryption => :simple_tls, :auth => {:method => :simple, :username => user, :password => params[:password]}
 
-			if ldap.bind
-			   # replace the session in the session table
-			   @del_session = Sessions.first(:username => "#{usern}")
-			   @del_session.destroy if @del_session
-			   @curr_session = Sessions.create(:username => "#{usern}",:session_key => "#{session[:session_id]}")
-			   @curr_session.save
-			end
-		end
+            if ldap.bind
+               # replace the session in the session table
+               @del_session = Sessions.first(:username => "#{usern}")
+               @del_session.destroy if @del_session
+               @curr_session = Sessions.create(:username => "#{usern}",:session_key => "#{session[:session_id]}")
+               @curr_session.save
+            end
+        end
     end
 
     redirect to("/")
@@ -201,11 +201,11 @@ end
 get '/admin/pull' do
     redirect to("/no_access") if not is_administrator?
 
-	if File.exists?("./export.zip")
-		send_file "./export.zip", :filename => "export.zip", :type => 'Application/octet-stream'
-	else
-		"No copy of the code available. Run scripts/make_export.sh."
-	end
+    if File.exists?("./export.zip")
+        send_file "./export.zip", :filename => "export.zip", :type => 'Application/octet-stream'
+    else
+        "No copy of the code available. Run scripts/make_export.sh."
+    end
 end
 
 # Create a new user
@@ -397,7 +397,7 @@ get '/master/findings/:id/edit' do
 
     # Query for all Findings
     @finding = TemplateFindings.first(:id => id)
-	@templates = Xslt.all()
+    @templates = Xslt.all()
 
     if (@nessusmap)
         @nessus = NessusMapping.all(:templatefindings_id => id)
@@ -539,84 +539,84 @@ get '/master/findings/:id/preview' do
 
     report_xml = "#{findings_xml}"
 
-	xslt_elem = Xslt.first(:finding_template => true)
+    xslt_elem = Xslt.first(:finding_template => true)
 
-	if xslt_elem
+    if xslt_elem
 
-		# Push the finding from XML to XSLT
-		xslt = Nokogiri::XSLT(File.read(xslt_elem.xslt_location))
+        # Push the finding from XML to XSLT
+        xslt = Nokogiri::XSLT(File.read(xslt_elem.xslt_location))
 
-		docx_xml = xslt.transform(Nokogiri::XML(report_xml))
+        docx_xml = xslt.transform(Nokogiri::XML(report_xml))
 
-		# We use a temporary file with a random name
-		rand_file = "./tmp/#{rand(36**12).to_s(36)}.docx"
+        # We use a temporary file with a random name
+        rand_file = "./tmp/#{rand(36**12).to_s(36)}.docx"
 
-		# Create a temporary copy of the finding_template
-		FileUtils::copy_file(xslt_elem.docx_location,rand_file)
+        # Create a temporary copy of the finding_template
+        FileUtils::copy_file(xslt_elem.docx_location,rand_file)
 
-		# A better way would be to create the zip file in memory and return to the user, this is not ideal
-		Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
-			zipfile.add_or_replace_buffer('word/document.xml',
-										  docx_xml.to_s)
-		end
+        # A better way would be to create the zip file in memory and return to the user, this is not ideal
+        Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
+            zipfile.add_or_replace_buffer('word/document.xml',
+                                          docx_xml.to_s)
+        end
 
-		send_file rand_file, :type => 'docx', :filename => "#{@finding.title}.docx"
+        send_file rand_file, :type => 'docx', :filename => "#{@finding.title}.docx"
 
-	else
-		"You don't have a Finding Template (did you delete the temp?) -_- ... If you're an admin go to <a href='/admin/templates/add'>here</a> to add one.'"
-	end
+    else
+        "You don't have a Finding Template (did you delete the temp?) -_- ... If you're an admin go to <a href='/admin/templates/add'>here</a> to add one.'"
+    end
 end
 
 # Export a findings database
 get '/master/export' do
-	json = ""
+    json = ""
 
-	findings = TemplateFindings.all
+    findings = TemplateFindings.all
 
-	local_filename = "./tmp/#{rand(36**12).to_s(36)}.json"
+    local_filename = "./tmp/#{rand(36**12).to_s(36)}.json"
     File.open(local_filename, 'w') {|f| f.write(JSON.pretty_generate(findings)) }
 
-	send_file local_filename, :type => 'json', :filename => "template_findings.json"
+    send_file local_filename, :type => 'json', :filename => "template_findings.json"
 end
 
 # Import a findings database
 get '/master/import' do
-	haml :import_templates
+    haml :import_templates
 end
 
 # Import a findings database
 post '/master/import' do
-	# reject if the file is above a certain limit
-	if params[:file][:tempfile].size > 1000000
-		return "File too large. 1MB limit"
-	end
+    # reject if the file is above a certain limit
+    if params[:file][:tempfile].size > 1000000
+        return "File too large. 1MB limit"
+    end
 
-	json_file = params[:file][:tempfile].read
-	line = JSON.parse(json_file)
+    json_file = params[:file][:tempfile].read
+    line = JSON.parse(json_file)
 
-	line.each do |j|
-		j["id"] = nil
+    line.each do |j|
+        j["id"] = nil
 
-		finding = TemplateFindings.first(:title => j["title"])
+        finding = TemplateFindings.first(:title => j["title"])
 
-		if finding
-			#the finding title already exists in the database
-			if finding["overview"] == j["overview"] and finding["remediation"] == j["remediation"]
-				# the finding already exists, ignore it
-			else
-				# it's a modified finding
-				j["title"] = "#{j['title']} - [Uploaded Modified Templated Finding]"
-				params[:approved] !=nil ? j["approved"] = true : j["approved"] = false
+        if finding
+            #the finding title already exists in the database
+            if finding["overview"] == j["overview"] and finding["remediation"] == j["remediation"]
+                # the finding already exists, ignore it
+            else
+                # it's a modified finding
+                j["title"] = "#{j['title']} - [Uploaded Modified Templated Finding]"
+                params[:approved] !=nil ? j["approved"] = true : j["approved"] = false
                 f = TemplateFindings.create(j)
-				f.save
-			end
-		else
-			params[:approved] != nil ? j["approved"] = true : j["approved"] = false
-			f = TemplateFindings.first_or_create(j)
-			f.save
-		end
-	end
-	redirect to("/master/findings")
+                f.save
+            end
+        else
+            params[:approved] != nil ? j["approved"] = true : j["approved"] = false
+            f = TemplateFindings.first_or_create(j)
+            f.save
+        end
+    end
+    redirect to("/master/findings")
 end
 
 # Manage Templated Reports
@@ -656,11 +656,11 @@ get '/admin/delete/templates/:id' do
 
     @xslt = Xslt.first(:id => params[:id])
 
-	if @xslt
-		@xslt.destroy
-		File.delete(@xslt.xslt_location)
-		File.delete(@xslt.docx_location)
-	end
+    if @xslt
+        @xslt.destroy
+        File.delete(@xslt.xslt_location)
+        File.delete(@xslt.docx_location)
+    end
     redirect to('/admin/templates')
 end
 
@@ -671,20 +671,20 @@ post '/admin/templates/add' do
 
     @admin = true
 
-	xslt_file = "./templates/#{rand(36**36).to_s(36)}.xslt"
+    xslt_file = "./templates/#{rand(36**36).to_s(36)}.xslt"
 
-	# reject if the file is above a certain limit
-	if params[:file][:tempfile].size > 100000000
-		return "File too large. 10MB limit"
-	end
+    # reject if the file is above a certain limit
+    if params[:file][:tempfile].size > 100000000
+        return "File too large. 10MB limit"
+    end
 
-	docx = "./templates/#{rand(36**36).to_s(36)}.docx"
-	File.open(docx, 'wb') {|f| f.write(params[:file][:tempfile].read) }
+    docx = "./templates/#{rand(36**36).to_s(36)}.docx"
+    File.open(docx, 'wb') {|f| f.write(params[:file][:tempfile].read) }
 
     error = false
     detail = ""
     begin
-	    xslt = generate_xslt(docx)
+        xslt = generate_xslt(docx)
     rescue ReportingError => detail
         error = true
     end
@@ -694,30 +694,30 @@ post '/admin/templates/add' do
         "The report template you uploaded threw an error when parsing:<p><p> #{detail.errorString}"
     else
 
-    	# open up a file handle and write the attachment
-	    File.open(xslt_file, 'wb') {|f| f.write(xslt) }
+        # open up a file handle and write the attachment
+        File.open(xslt_file, 'wb') {|f| f.write(xslt) }
 
-	    # delete the file data from the attachment
-	    datax = Hash.new
-	    # to prevent traversal we hardcode this
-	    datax["docx_location"] = "#{docx}"
-	    datax["xslt_location"] = "#{xslt_file}"
-	    datax["description"] = 	params[:description]
-	    datax["report_type"] = params[:report_type]
-	    data = url_escape_hash(datax)
-	    data["finding_template"] = params[:finding_template] ? true : false
-	    data["status_template"] = params[:status_template] ? true : false
+        # delete the file data from the attachment
+        datax = Hash.new
+        # to prevent traversal we hardcode this
+        datax["docx_location"] = "#{docx}"
+        datax["xslt_location"] = "#{xslt_file}"
+        datax["description"] =  params[:description]
+        datax["report_type"] = params[:report_type]
+        data = url_escape_hash(datax)
+        data["finding_template"] = params[:finding_template] ? true : false
+        data["status_template"] = params[:status_template] ? true : false
 
-	    @current = Xslt.first(:report_type => data["report_type"])
+        @current = Xslt.first(:report_type => data["report_type"])
 
-	    if @current
-		    @current.update(:xslt_location => data["xslt_location"], :docx_location => data["docx_location"], :description => data["description"])
-	    else
-		    @template = Xslt.new(data)
-		    @template.save
-	    end
+        if @current
+            @current.update(:xslt_location => data["xslt_location"], :docx_location => data["docx_location"], :description => data["description"])
+        else
+            @template = Xslt.new(data)
+            @template.save
+        end
 
-	    redirect to("/admin/templates")
+        redirect to("/admin/templates")
 
         haml :add_template, :encode_html => true
     end
@@ -753,7 +753,7 @@ post '/admin/templates/edit' do
     error = false
     detail = ""
     begin
-	    xslt = generate_xslt(docx)
+        xslt = generate_xslt(docx)
     rescue ReportingError => detail
         error = true
     end
@@ -762,30 +762,30 @@ post '/admin/templates/edit' do
         "The report template you uploaded threw an error when parsing:<p><p> #{detail.errorString}"
     else
 
-    	# open up a file handle and write the attachment
-	    File.open(xslt_file, 'wb') {|f| f.write(xslt) }
+        # open up a file handle and write the attachment
+        File.open(xslt_file, 'wb') {|f| f.write(xslt) }
 
-	    # delete the file data from the attachment
-	    datax = Hash.new
-	    # to prevent traversal we hardcode this
-	    datax["docx_location"] = "#{docx}"
-	    datax["xslt_location"] = "#{xslt_file}"
-	    datax["description"] = 	params[:description]
-	    datax["report_type"] = params[:report_type]
-	    data = url_escape_hash(datax)
-	    data["finding_template"] = params[:finding_template] ? true : false
-	    data["status_template"] = params[:status_template] ? true : false
+        # delete the file data from the attachment
+        datax = Hash.new
+        # to prevent traversal we hardcode this
+        datax["docx_location"] = "#{docx}"
+        datax["xslt_location"] = "#{xslt_file}"
+        datax["description"] =  params[:description]
+        datax["report_type"] = params[:report_type]
+        data = url_escape_hash(datax)
+        data["finding_template"] = params[:finding_template] ? true : false
+        data["status_template"] = params[:status_template] ? true : false
 
-	    @current = Xslt.first(:report_type => data["report_type"])
+        @current = Xslt.first(:report_type => data["report_type"])
 
-	    if @current
-		    @current.update(:xslt_location => data["xslt_location"], :docx_location => data["docx_location"], :description => data["description"])
-	    else
-		    @template = Xslt.new(data)
-		    @template.save
-	    end
+        if @current
+            @current.update(:xslt_location => data["xslt_location"], :docx_location => data["docx_location"], :description => data["description"])
+        else
+            @template = Xslt.new(data)
+            @template.save
+        end
 
-	    redirect to("/admin/templates")
+        redirect to("/admin/templates")
     end
 end
 
@@ -799,8 +799,8 @@ get '/reports/list' do
 
     @admin = true if is_administrator?
 
-	# allow the user to set their logo in the configuration options
-	@logo = config_options["logo"]
+    # allow the user to set their logo in the configuration options
+    @logo = config_options["logo"]
 
     haml :reports_list, :encode_html => true
 end
@@ -895,7 +895,7 @@ post '/report/:id/import_autoadd' do
     vulns.keys.each do |i|
         vulns[i].each do |v|
 
-			# if serpico finding id maps to nessus/burp plugin id, add to report
+            # if serpico finding id maps to nessus/burp plugin id, add to report
             if import_nessus
                 @mappings = NessusMapping.all(:pluginid => v)
             elsif import_burp
@@ -994,32 +994,32 @@ post '/report/:id/upload_attachments' do
     end
 
     if params[:file] == nil
-    	redirect to("/report/#{id}/upload_attachments?no_file=1")
+        redirect to("/report/#{id}/upload_attachments?no_file=1")
     end
 
     # We use a random filename
     rand_file = "./attachments/#{rand(36**36).to_s(36)}"
 
-	# reject if the file is above a certain limit
-	if params[:file][:tempfile].size > 100000000
-		return "File too large. 100MB limit"
-	end
+    # reject if the file is above a certain limit
+    if params[:file][:tempfile].size > 100000000
+        return "File too large. 100MB limit"
+    end
 
-	# open up a file handle and write the attachment
-	File.open(rand_file, 'wb') {|f| f.write(params[:file][:tempfile].read) }
+    # open up a file handle and write the attachment
+    File.open(rand_file, 'wb') {|f| f.write(params[:file][:tempfile].read) }
 
-	# delete the file data from the attachment
-	datax = Hash.new
-	# to prevent traversal we hardcode this
-	datax["filename_location"] = "#{rand_file}"
-	datax["filename"] = params[:file][:filename]
-	datax["description"] = CGI::escapeHTML(params[:description]).gsub(" ","_").gsub("/","_")
-	datax["report_id"] = id
-	data = url_escape_hash(datax)
+    # delete the file data from the attachment
+    datax = Hash.new
+    # to prevent traversal we hardcode this
+    datax["filename_location"] = "#{rand_file}"
+    datax["filename"] = params[:file][:filename]
+    datax["description"] = CGI::escapeHTML(params[:description]).gsub(" ","_").gsub("/","_")
+    datax["report_id"] = id
+    data = url_escape_hash(datax)
 
-	@attachment = Attachments.new(data)
-	@attachment.save
-	redirect to("/report/#{id}/attachments")
+    @attachment = Attachments.new(data)
+    @attachment.save
+    redirect to("/report/#{id}/attachments")
 end
 
 # display attachment
@@ -1050,16 +1050,16 @@ get '/report/:id/attachments/delete/:att_id' do
 
     @attachment = Attachments.first(:report_id => id, :id => params[:att_id])
 
-	if @attachment == nil
-		return "No Such Attachment"
-	end
+    if @attachment == nil
+        return "No Such Attachment"
+    end
 
     File.delete(@attachment.filename_location)
 
     # delete the entries
     @attachment.destroy
 
-	redirect to("/report/#{id}/attachments")
+    redirect to("/report/#{id}/attachments")
 end
 
 
@@ -1090,7 +1090,7 @@ get '/report/:id/edit' do
 
     # Query for the first report matching the report_name
     @report = get_report(id)
-	@templates = Xslt.all(:order => [:report_type.asc])
+    @templates = Xslt.all(:order => [:report_type.asc])
 
     if @report == nil
         return "No Such Report"
@@ -1140,9 +1140,9 @@ get '/report/:id/user_defined_variables' do
         end
 
         @user_variables.each do |k,v|
-			if v
-				@user_variables[k] = meta_markup(v)
-			end
+            if v
+                @user_variables[k] = meta_markup(v)
+            end
         end
     else
         @user_variables = config_options["user_defined_variables"]
@@ -1155,44 +1155,44 @@ end
 post '/report/:id/user_defined_variables' do
     data = url_escape_hash(request.POST)
 
-	variable_hash = Hash.new()
-	data.each do |k,v|
-		if k =~ /variable_name/
-			key = k.split("variable_name_").last.split("_").first
+    variable_hash = Hash.new()
+    data.each do |k,v|
+        if k =~ /variable_name/
+            key = k.split("variable_name_").last.split("_").first
 
-			# remove certain elements from name %&"<>
-			v = v.gsub("%","_").gsub("&quot;","'").gsub("&amp;","").gsub("&gt;","").gsub("&lt;","")
-			variable_hash["#{key}%#{v}"] = "DEFAULT"
+            # remove certain elements from name %&"<>
+            v = v.gsub("%","_").gsub("&quot;","'").gsub("&amp;","").gsub("&gt;","").gsub("&lt;","")
+            variable_hash["#{key}%#{v}"] = "DEFAULT"
 
-		end
-		if k =~ /variable_data/
-			key = k.split("variable_data_").last.split("_").first
+        end
+        if k =~ /variable_data/
+            key = k.split("variable_data_").last.split("_").first
 
-			variable_hash.each do |k1,v1|
-				if k1 =~ /%/
-					kk = k1.split("%")
-					if kk.first == key
-						variable_hash[k1] = v
-					end
-				end
-			end
-		end
-	end
+            variable_hash.each do |k1,v1|
+                if k1 =~ /%/
+                    kk = k1.split("%")
+                    if kk.first == key
+                        variable_hash[k1] = v
+                    end
+                end
+            end
+        end
+    end
 
-	# remove the % and any blank values
-	q = variable_hash.clone
-	variable_hash.each do |k,v|
-		if k =~ /%/
-			p k.split("%")
-			if k.split("%").size == 1
-				q.delete(k)
-			else
-				q[k.split("%").last] = v
-				q.delete(k)
-			end
-		end
-	end
-	variable_hash = q
+    # remove the % and any blank values
+    q = variable_hash.clone
+    variable_hash.each do |k,v|
+        if k =~ /%/
+            p k.split("%")
+            if k.split("%").size == 1
+                q.delete(k)
+            else
+                q[k.split("%").last] = v
+                q.delete(k)
+            end
+        end
+    end
+    variable_hash = q
 
     id = params[:id]
     @report = get_report(id)
@@ -1262,87 +1262,87 @@ get '/report/:id/status' do
 
     report_xml = "#{findings_xml}"
 
-	xslt_elem = Xslt.first(:status_template => true)
+    xslt_elem = Xslt.first(:status_template => true)
 
-	if xslt_elem
+    if xslt_elem
 
-		# Push the finding from XML to XSLT
-		xslt = Nokogiri::XSLT(File.read(xslt_elem.xslt_location))
+        # Push the finding from XML to XSLT
+        xslt = Nokogiri::XSLT(File.read(xslt_elem.xslt_location))
 
-		docx_xml = xslt.transform(Nokogiri::XML(report_xml))
+        docx_xml = xslt.transform(Nokogiri::XML(report_xml))
 
-		# We use a temporary file with a random name
-		rand_file = "./tmp/#{rand(36**12).to_s(36)}.docx"
+        # We use a temporary file with a random name
+        rand_file = "./tmp/#{rand(36**12).to_s(36)}.docx"
 
-		# Create a temporary copy of the finding_template
-		FileUtils::copy_file(xslt_elem.docx_location,rand_file)
+        # Create a temporary copy of the finding_template
+        FileUtils::copy_file(xslt_elem.docx_location,rand_file)
 
-		### IMAGE INSERT CODE
-		if docx_xml.to_s =~ /\[!!/
-			# first we read in the current [Content_Types.xml]
-			content_types = ""
-			Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
-				zipfile.fopen("[Content_Types].xml") do |f|
-					content_types = f.read # read entry content
-				end
-			end
+        ### IMAGE INSERT CODE
+        if docx_xml.to_s =~ /\[!!/
+            # first we read in the current [Content_Types.xml]
+            content_types = ""
+            Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
+                zipfile.fopen("[Content_Types].xml") do |f|
+                    content_types = f.read # read entry content
+                end
+            end
 
-			# add the png and jpg handling to end of content types document
-			if !(content_types =~ /image\/jpg/)
-				content_types = content_types.sub("</Types>","<Default Extension=\"jpg\" ContentType=\"image/jpg\"/></Types>")
-			end
-			if !(content_types =~ /image\/png/)
-				content_types = content_types.sub("</Types>","<Default Extension=\"png\" ContentType=\"image/png\"/></Types>")
-			end
-			if !(content_types =~ /image\/jpeg/)
-				content_types = content_types.sub("</Types>","<Default Extension=\"jpeg\" ContentType=\"image/jpeg\"/></Types>")
-			end
+            # add the png and jpg handling to end of content types document
+            if !(content_types =~ /image\/jpg/)
+                content_types = content_types.sub("</Types>","<Default Extension=\"jpg\" ContentType=\"image/jpg\"/></Types>")
+            end
+            if !(content_types =~ /image\/png/)
+                content_types = content_types.sub("</Types>","<Default Extension=\"png\" ContentType=\"image/png\"/></Types>")
+            end
+            if !(content_types =~ /image\/jpeg/)
+                content_types = content_types.sub("</Types>","<Default Extension=\"jpeg\" ContentType=\"image/jpeg\"/></Types>")
+            end
 
-			# replace the content types to support images
-			Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
-				 zipfile.add_or_replace_buffer("[Content_Types].xml",
-				   content_types)
-			end
+            # replace the content types to support images
+            Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
+                 zipfile.add_or_replace_buffer("[Content_Types].xml",
+                   content_types)
+            end
 
-			# replace all [!! image !!] in the document
-			imgs = docx_xml.to_s.split("[!!")
-			docx = imgs.first
-			imgs.delete_at(0)
+            # replace all [!! image !!] in the document
+            imgs = docx_xml.to_s.split("[!!")
+            docx = imgs.first
+            imgs.delete_at(0)
 
-			imgs.each do |image_i|
+            imgs.each do |image_i|
 
-				name = image_i.split("!!]").first.gsub(" ","")
-				end_xml = image_i.split("!!]").last
+                name = image_i.split("!!]").first.gsub(" ","")
+                end_xml = image_i.split("!!]").last
 
-				# search for the image in the attachments
-				image = Attachments.first(:description => name, :report_id => id)
+                # search for the image in the attachments
+                image = Attachments.first(:description => name, :report_id => id)
 
-				# tries to prevent breakage in the case image dne
-				if image
-					docx = image_insert(docx, rand_file, image, end_xml)
-				else
-					docx << end_xml
-				end
+                # tries to prevent breakage in the case image dne
+                if image
+                    docx = image_insert(docx, rand_file, image, end_xml)
+                else
+                    docx << end_xml
+                end
 
-			end
+            end
 
-		else
-			# no images in finding
-			docx = docx_xml.to_s
-		end
-		#### END IMAGE INSERT CODE
+        else
+            # no images in finding
+            docx = docx_xml.to_s
+        end
+        #### END IMAGE INSERT CODE
 
-		# A better way would be to create the zip file in memory and return to the user, this is not ideal
-		Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
-			zipfile.add_or_replace_buffer('word/document.xml',
-										  docx)
-		end
+        # A better way would be to create the zip file in memory and return to the user, this is not ideal
+        Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
+            zipfile.add_or_replace_buffer('word/document.xml',
+                                          docx)
+        end
 
-		send_file rand_file, :type => 'docx', :filename => "status.docx"
+        send_file rand_file, :type => 'docx', :filename => "status.docx"
 
-	else
-		"You don't have a Finding Template (did you delete the temp?) -_- ... If you're an admin go to <a href='/admin/templates/add'>here</a> to add one."
-	end
+    else
+        "You don't have a Finding Template (did you delete the temp?) -_- ... If you're an admin go to <a href='/admin/templates/add'>here</a> to add one."
+    end
 
 
 end
@@ -1381,17 +1381,17 @@ post '/report/:id/findings_add' do
 
     redirect to("/report/#{id}/findings") unless params[:finding]
 
-	params[:finding].each do |finding|
-		templated_finding = TemplateFindings.first(:id => finding.to_i)
+    params[:finding].each do |finding|
+        templated_finding = TemplateFindings.first(:id => finding.to_i)
 
-		templated_finding.id = nil
-		attr = templated_finding.attributes
-		attr.delete(:approved)
-		attr["master_id"] = finding.to_i
-		@newfinding = Findings.new(attr)
-		@newfinding.report_id = id
-		@newfinding.save
-	end
+        templated_finding.id = nil
+        attr = templated_finding.attributes
+        attr.delete(:approved)
+        attr["master_id"] = finding.to_i
+        @newfinding = Findings.new(attr)
+        @newfinding.report_id = id
+        @newfinding.save
+    end
 
     # if we have hosts add them to the findings too
     params[:finding].each do |number|
@@ -1551,7 +1551,7 @@ get '/report/:id/findings/:finding_id/upload' do
                     :poc => @finding.poc,
                     :remediation => @finding.remediation,
                     :approved => false,
-					:references => @finding.references,
+                    :references => @finding.references,
                     :risk => @finding.risk
                     }
 
@@ -1622,89 +1622,89 @@ get '/report/:id/findings/:finding_id/preview' do
 
     report_xml = "#{findings_xml}"
 
-	xslt_elem = Xslt.first(:finding_template => true)
+    xslt_elem = Xslt.first(:finding_template => true)
 
-	if xslt_elem
+    if xslt_elem
 
-		# Push the finding from XML to XSLT
-		xslt = Nokogiri::XSLT(File.read(xslt_elem.xslt_location))
+        # Push the finding from XML to XSLT
+        xslt = Nokogiri::XSLT(File.read(xslt_elem.xslt_location))
 
-		docx_xml = xslt.transform(Nokogiri::XML(report_xml))
+        docx_xml = xslt.transform(Nokogiri::XML(report_xml))
 
-		# We use a temporary file with a random name
-		rand_file = "./tmp/#{rand(36**12).to_s(36)}.docx"
+        # We use a temporary file with a random name
+        rand_file = "./tmp/#{rand(36**12).to_s(36)}.docx"
 
-		# Create a temporary copy of the finding_template
-		FileUtils::copy_file(xslt_elem.docx_location,rand_file)
+        # Create a temporary copy of the finding_template
+        FileUtils::copy_file(xslt_elem.docx_location,rand_file)
 
-		### IMAGE INSERT CODE
-		if docx_xml.to_s =~ /\[!!/
-			# first we read in the current [Content_Types.xml]
-			content_types = ""
-			Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
-				zipfile.fopen("[Content_Types].xml") do |f|
-					content_types = f.read # read entry content
-				end
-			end
+        ### IMAGE INSERT CODE
+        if docx_xml.to_s =~ /\[!!/
+            # first we read in the current [Content_Types.xml]
+            content_types = ""
+            Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
+                zipfile.fopen("[Content_Types].xml") do |f|
+                    content_types = f.read # read entry content
+                end
+            end
 
-			# add the png and jpg handling to end of content types document
-			if !(content_types =~ /image\/jpg/)
-				content_types = content_types.sub("</Types>","<Default Extension=\"jpg\" ContentType=\"image/jpg\"/></Types>")
-			end
-			if !(content_types =~ /image\/png/)
-				content_types = content_types.sub("</Types>","<Default Extension=\"png\" ContentType=\"image/png\"/></Types>")
-			end
-			if !(content_types =~ /image\/jpeg/)
-				content_types = content_types.sub("</Types>","<Default Extension=\"jpeg\" ContentType=\"image/jpeg\"/></Types>")
-			end
+            # add the png and jpg handling to end of content types document
+            if !(content_types =~ /image\/jpg/)
+                content_types = content_types.sub("</Types>","<Default Extension=\"jpg\" ContentType=\"image/jpg\"/></Types>")
+            end
+            if !(content_types =~ /image\/png/)
+                content_types = content_types.sub("</Types>","<Default Extension=\"png\" ContentType=\"image/png\"/></Types>")
+            end
+            if !(content_types =~ /image\/jpeg/)
+                content_types = content_types.sub("</Types>","<Default Extension=\"jpeg\" ContentType=\"image/jpeg\"/></Types>")
+            end
 
-			# replace the content types to support images
-			Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
-				 zipfile.add_or_replace_buffer("[Content_Types].xml",
-				   content_types)
-			end
+            # replace the content types to support images
+            Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
+                 zipfile.add_or_replace_buffer("[Content_Types].xml",
+                   content_types)
+            end
 
-			# replace all [!! image !!] in the document
-			imgs = docx_xml.to_s.split("[!!")
-			docx = imgs.first
-			imgs.delete_at(0)
+            # replace all [!! image !!] in the document
+            imgs = docx_xml.to_s.split("[!!")
+            docx = imgs.first
+            imgs.delete_at(0)
 
-			imgs.each do |image_i|
+            imgs.each do |image_i|
 
-				name = image_i.split("!!]").first.gsub(" ","")
-				end_xml = image_i.split("!!]").last
+                name = image_i.split("!!]").first.gsub(" ","")
+                end_xml = image_i.split("!!]").last
 
-				# search for the image in the attachments
-				image = Attachments.first(:description => name, :report_id => id)
+                # search for the image in the attachments
+                image = Attachments.first(:description => name, :report_id => id)
 
-				# tries to prevent breakage in the case image dne
-				if image
-					# inserts the image into the doc
-					docx = image_insert(docx, rand_file, image, end_xml)
-				else
-					docx << end_xml
-				end
+                # tries to prevent breakage in the case image dne
+                if image
+                    # inserts the image into the doc
+                    docx = image_insert(docx, rand_file, image, end_xml)
+                else
+                    docx << end_xml
+                end
 
-			end
+            end
 
-		else
-			# no images in finding
-			docx = docx_xml.to_s
-		end
-		#### END IMAGE INSERT CODE
+        else
+            # no images in finding
+            docx = docx_xml.to_s
+        end
+        #### END IMAGE INSERT CODE
 
-		# A better way would be to create the zip file in memory and return to the user, this is not ideal
-		Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
-			 zipfile.add_or_replace_buffer('word/document.xml',
-				 docx)
-		end
-		send_file rand_file, :type => 'docx', :filename => "#{@finding.title}.docx"
+        # A better way would be to create the zip file in memory and return to the user, this is not ideal
+        Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
+             zipfile.add_or_replace_buffer('word/document.xml',
+                 docx)
+        end
+        send_file rand_file, :type => 'docx', :filename => "#{@finding.title}.docx"
 
-	else
+    else
 
-		"You don't have a Finding Template (did you delete the default one?) -_- ... If you're an admin go to <a href='/admin/templates/add'>here</a> to add one."
+        "You don't have a Finding Template (did you delete the default one?) -_- ... If you're an admin go to <a href='/admin/templates/add'>here</a> to add one."
 
-	end
+    end
 end
 
 # Generate the report
@@ -1768,25 +1768,25 @@ get '/report/:id/generate' do
     # Replace the stub elements with real XML elements
     findings_xml = meta_markup_unencode(findings_xml, @report.short_company_name)
 
-	# check if the report has user_defined variables
-	if @report.user_defined_variables
+    # check if the report has user_defined variables
+    if @report.user_defined_variables
 
-		# we need the user defined variables in xml
-		udv_hash = JSON.parse(@report.user_defined_variables)
-		udv = "<udv>"
-		udv_hash.each do |key,value|
-			udv << "<#{key}>"
-			udv << "#{value}"
-			udv << "</#{key}>\n"
-		end
-		udv << "</udv>"
-	else
-		udv = ""
-	end
+        # we need the user defined variables in xml
+        udv_hash = JSON.parse(@report.user_defined_variables)
+        udv = "<udv>"
+        udv_hash.each do |key,value|
+            udv << "<#{key}>"
+            udv << "#{value}"
+            udv << "</#{key}>\n"
+        end
+        udv << "</udv>"
+    else
+        udv = ""
+    end
 
     report_xml = "<report>#{@report.to_xml}#{udv}#{findings_xml}</report>"
 
-	xslt_elem = Xslt.first(:report_type => @report.report_type)
+    xslt_elem = Xslt.first(:report_type => @report.report_type)
 
     # Push the finding from XML to XSLT
     xslt = Nokogiri::XSLT(File.read(xslt_elem.xslt_location))
@@ -1799,60 +1799,60 @@ get '/report/:id/generate' do
     # Create a temporary copy of the word doc
     FileUtils::copy_file(xslt_elem.docx_location,rand_file)
 
-	### IMAGE INSERT CODE
-	if docx_xml.to_s =~ /\[!!/
-		# first we read in the current [Content_Types.xml]
-		content_types = ""
-		Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
-			zipfile.fopen("[Content_Types].xml") do |f|
-				content_types = f.read # read entry content
-			end
-		end
+    ### IMAGE INSERT CODE
+    if docx_xml.to_s =~ /\[!!/
+        # first we read in the current [Content_Types.xml]
+        content_types = ""
+        Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
+            zipfile.fopen("[Content_Types].xml") do |f|
+                content_types = f.read # read entry content
+            end
+        end
 
-		# add the png and jpg handling to end of content types document
-		if !(content_types =~ /image\/jpg/)
-			content_types = content_types.sub("</Types>","<Default Extension=\"jpg\" ContentType=\"image/jpg\"/></Types>")
-		end
-		if !(content_types =~ /image\/png/)
-			content_types = content_types.sub("</Types>","<Default Extension=\"png\" ContentType=\"image/png\"/></Types>")
-		end
-		if !(content_types =~ /image\/jpeg/)
-			content_types = content_types.sub("</Types>","<Default Extension=\"jpeg\" ContentType=\"image/jpeg\"/></Types>")
-		end
+        # add the png and jpg handling to end of content types document
+        if !(content_types =~ /image\/jpg/)
+            content_types = content_types.sub("</Types>","<Default Extension=\"jpg\" ContentType=\"image/jpg\"/></Types>")
+        end
+        if !(content_types =~ /image\/png/)
+            content_types = content_types.sub("</Types>","<Default Extension=\"png\" ContentType=\"image/png\"/></Types>")
+        end
+        if !(content_types =~ /image\/jpeg/)
+            content_types = content_types.sub("</Types>","<Default Extension=\"jpeg\" ContentType=\"image/jpeg\"/></Types>")
+        end
 
-		# replace the content types to support images
-		Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
-			 zipfile.add_or_replace_buffer("[Content_Types].xml",
-			   content_types)
-		end
+        # replace the content types to support images
+        Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
+             zipfile.add_or_replace_buffer("[Content_Types].xml",
+               content_types)
+        end
 
-		# replace all [!! image !!] in the document
-		imgs = docx_xml.to_s.split("[!!")
-		docx = imgs.first
-		imgs.delete_at(0)
+        # replace all [!! image !!] in the document
+        imgs = docx_xml.to_s.split("[!!")
+        docx = imgs.first
+        imgs.delete_at(0)
 
-		imgs.each do |image_i|
+        imgs.each do |image_i|
 
-			name = image_i.split("!!]").first.gsub(" ","")
-			end_xml = image_i.split("!!]").last
+            name = image_i.split("!!]").first.gsub(" ","")
+            end_xml = image_i.split("!!]").last
 
-			# search for the image in the attachments
-			image = Attachments.first(:description => name, :report_id => id)
+            # search for the image in the attachments
+            image = Attachments.first(:description => name, :report_id => id)
 
-				# tries to prevent breakage in the case image dne
-				if image
-					# inserts the image
-					docx = image_insert(docx, rand_file, image, end_xml)
-				else
-					docx << end_xml
-				end
+                # tries to prevent breakage in the case image dne
+                if image
+                    # inserts the image
+                    docx = image_insert(docx, rand_file, image, end_xml)
+                else
+                    docx << end_xml
+                end
 
-		end
-	else
-		# no images in finding
-		docx = docx_xml.to_s
-	end
-	#### END IMAGE INSERT CODE
+        end
+    else
+        # no images in finding
+        docx = docx_xml.to_s
+    end
+    #### END IMAGE INSERT CODE
 
     # Create the docx, would be better to create the zip file in memory and return to the user
     Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
@@ -1865,94 +1865,94 @@ end
 
 # Export a report
 get '/report/:id/export' do
-	json = {}
+    json = {}
 
     id = params[:id]
-	report = get_report(id)
+    report = get_report(id)
 
-	# bail without a report
-	redirect to("/") unless report
+    # bail without a report
+    redirect to("/") unless report
 
-	# add the report
-	json["report"] = report
+    # add the report
+    json["report"] = report
 
-	# add the findings
+    # add the findings
     findings = Findings.all(:report_id => id)
-	json["findings"] = findings
+    json["findings"] = findings
 
-	local_filename = "./tmp/#{rand(36**12).to_s(36)}.json"
+    local_filename = "./tmp/#{rand(36**12).to_s(36)}.json"
     File.open(local_filename, 'w') {|f| f.write(JSON.pretty_generate(json)) }
 
-	send_file local_filename, :type => 'json', :filename => "exported_report.json"
+    send_file local_filename, :type => 'json', :filename => "exported_report.json"
 end
 
 # Import a report
 get '/report/import' do
-	haml :import_report
+    haml :import_report
 end
 
 # Import a report
 post '/report/import' do
-	# reject if the file is above a certain limit
-	if params[:file][:tempfile].size > 1000000
-		return "File too large. 1MB limit"
-	end
+    # reject if the file is above a certain limit
+    if params[:file][:tempfile].size > 1000000
+        return "File too large. 1MB limit"
+    end
 
-	json_file = params[:file][:tempfile].read
-	line = JSON.parse(json_file)
+    json_file = params[:file][:tempfile].read
+    line = JSON.parse(json_file)
 
-	line["report"]["id"] = nil
+    line["report"]["id"] = nil
 
-	f = Reports.create(line["report"])
-	f.save
+    f = Reports.create(line["report"])
+    f.save
 
-	# now add the findings
-	line["findings"].each do |finding|
-		finding["id"] = nil
-		finding["master_id"] = nil
-		finding["report_id"] = f.id
-		finding["finding_modified"] = nil
-		g = Findings.create(finding)
-		g.save
-	end
+    # now add the findings
+    line["findings"].each do |finding|
+        finding["id"] = nil
+        finding["master_id"] = nil
+        finding["report_id"] = f.id
+        finding["finding_modified"] = nil
+        g = Findings.create(finding)
+        g.save
+    end
 
-	# we should redirect to the newly imported report
-	redirect to("/report/#{f.id}/edit")
+    # we should redirect to the newly imported report
+    redirect to("/report/#{f.id}/edit")
 end
 
 get '/report/:id/text_status' do
     id = params[:id]
-	@report = get_report(id)
+    @report = get_report(id)
 
-	# bail without a report
-	redirect to("/") unless @report
+    # bail without a report
+    redirect to("/") unless @report
 
-	# add the findings
+    # add the findings
     @findings = Findings.all(:report_id => id)
 
-	haml :text_status, :encode_html => true
+    haml :text_status, :encode_html => true
 end
 
 # generate an asciidoc version of current findings
 get '/report/:id/asciidoc_status' do
     id = params[:id]
-	report = get_report(id)
+    report = get_report(id)
 
-	# bail without a report
-	redirect to("/") unless report
+    # bail without a report
+    redirect to("/") unless report
 
-	# add the findings
+    # add the findings
     findings = Findings.all(:report_id => id)
 
-	ascii_doc_ = ""
-	findings.each do |finding|
-		ascii_doc_ << gen_asciidoc(finding,config_options["dread"])
-	end
+    ascii_doc_ = ""
+    findings.each do |finding|
+        ascii_doc_ << gen_asciidoc(finding,config_options["dread"])
+    end
 
-	local_filename = "./tmp/#{rand(36**12).to_s(36)}.asd"
+    local_filename = "./tmp/#{rand(36**12).to_s(36)}.asd"
     File.open(local_filename, 'w') {|f| f.write(ascii_doc_) }
 
-	send_file local_filename, :type => 'txt', :filename => "report_#{id}_findings.asd"
+    send_file local_filename, :type => 'txt', :filename => "report_#{id}_findings.asd"
 end
 
 # generate a presentation of current report
@@ -2037,52 +2037,52 @@ def get_reports
 end
 
 def image_insert(docx, rand_file, image, end_xml)
-	# assign random id, ms requires it begin with a letter. weird.
-	p_id = "d#{rand(36**7).to_s(36)}"
-	name = image.description
+    # assign random id, ms requires it begin with a letter. weird.
+    p_id = "d#{rand(36**7).to_s(36)}"
+    name = image.description
 
-	# insert picture into xml
-	docx << " <w:pict><v:shape id=\"myShape_#{p_id}\" type=\"#_x0000_t75\" style=\"width:400; height:200\"><v:imagedata r:id=\"#{p_id}\"/></v:shape></w:pict>"
-	docx << end_xml
+    # insert picture into xml
+    docx << " <w:pict><v:shape id=\"myShape_#{p_id}\" type=\"#_x0000_t75\" style=\"width:400; height:200\"><v:imagedata r:id=\"#{p_id}\"/></v:shape></w:pict>"
+    docx << end_xml
 
-	# insert picture into zip
-	exists = false
-	img_data = ""
+    # insert picture into zip
+    exists = false
+    img_data = ""
 
-	File.open(image.filename_location, 'rb') {|file| img_data << file.read }
-	Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
-		#iterate zipfile to see if it has media dir, this could be better
-		zipfile.each do	|file|
-			if file.name =~ /word\/media/
-				exists = true
-			end
-		end
+    File.open(image.filename_location, 'rb') {|file| img_data << file.read }
+    Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
+        #iterate zipfile to see if it has media dir, this could be better
+        zipfile.each do |file|
+            if file.name =~ /word\/media/
+                exists = true
+            end
+        end
 
-		if exists
-			zipfile.add_or_replace_buffer("word/media/#{name}",img_data)
-		else
-			zipfile.add_or_replace_buffer("word/#{name}",img_data)
-		end
-	end
+        if exists
+            zipfile.add_or_replace_buffer("word/media/#{name}",img_data)
+        else
+            zipfile.add_or_replace_buffer("word/#{name}",img_data)
+        end
+    end
 
-	# update document.xml.rels
-	docu_rels = ""
-	Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
-		zipfile.fopen("word/_rels/document.xml.rels") do |f|
-			docu_rels = f.read # read entry content
-		end
-	end
+    # update document.xml.rels
+    docu_rels = ""
+    Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
+        zipfile.fopen("word/_rels/document.xml.rels") do |f|
+            docu_rels = f.read # read entry content
+        end
+    end
 
-	if exists
-		docu_rels = docu_rels.sub("</Relationships>","<Relationship Id=\"#{p_id}\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/image\" Target=\"media/#{name}\"/></Relationships>")
-	else
-		docu_rels = docu_rels.sub("</Relationships>","<Relationship Id=\"#{p_id}\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/image\" Target=\"#{name}\"/></Relationships>")
-	end
+    if exists
+        docu_rels = docu_rels.sub("</Relationships>","<Relationship Id=\"#{p_id}\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/image\" Target=\"media/#{name}\"/></Relationships>")
+    else
+        docu_rels = docu_rels.sub("</Relationships>","<Relationship Id=\"#{p_id}\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/image\" Target=\"#{name}\"/></Relationships>")
+    end
 
-	Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
-		zipfile.add_or_replace_buffer("word/_rels/document.xml.rels",
-			docu_rels)
-	end
+    Zip::Archive.open(rand_file, Zip::CREATE) do |zipfile|
+        zipfile.add_or_replace_buffer("word/_rels/document.xml.rels",
+            docu_rels)
+    end
 
-	return docx
+    return docx
 end
