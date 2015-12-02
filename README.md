@@ -1,5 +1,6 @@
 #copy Moose Dojo
-#Serpico
+#Serpico CBD 1.1
+##by helit
 渗透测试报告汉化版
 对views下面的文件夹进行了汉化
 #简单的报告编写和合作工具
