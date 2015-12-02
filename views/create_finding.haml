@@ -5,12 +5,12 @@
   %br
   %form{ :class => "form-horizontal", :method => 'post', :enctype => 'application/x-www-form-urlencoded'}
     .control-group
-      %label{ :class => "control-label", :for => "title" } 标题
+      %label{ :class => "control-label", :for => "title" } 漏洞名称
       .controls
         %input{ :type => 'text', :name => 'title', :value => ""}
     - if !@master
       .control-group
-        %label{ :class => "control-label", :for => "assessment_type" } Assessment Type
+        %label{ :class => "control-label", :for => "assessment_type" } 评定类型 注：暂时没用
         .controls
           %select{ :name => "assessment_type" }
             - options.assessment_types.each do |type|
@@ -145,7 +145,7 @@
         %textarea{ :rows => '5', :class => 'input-xxlarge', :name => 'references'}
     - if !@master
       .control-group
-        %label{ :class => "control-label", :for => "notes" } Notes
+        %label{ :class => "control-label", :for => "notes" } 备注
         .controls
           %textarea{ :rows => '10', :class => 'input-xxlarge', :id => 'notes', :name => 'notes'}
 

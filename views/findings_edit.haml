@@ -103,7 +103,7 @@
           %input{ :type => 'number', :min => '1', :max => '10', :name => 'discoverability', :value => "#{@finding.discoverability}", :required => true}
     - else
       .control-group
-        %label{ :class => "control-label", :for => "risk" } 漏洞风险评分等级（暂时忽略）
+        %label{ :class => "control-label", :for => "risk" } 漏洞风险评分等级 注：暂时没用
         .controls
           %select{ :name => "risk" }
             - risk_types = ["None", "Low", "Moderate", "High", "Critical"]
@@ -230,7 +230,7 @@
         %textarea{ :rows => '10', :class => 'input-xxlarge', :id => 'risk_assessment', :name => 'risk_assessment'}
           - if @finding
             - if @finding.risk_assessment
-              #{meta_markup(@finding.remediation)}
+              #{meta_markup(@finding.risk_assessment)}
     .control-group
       %label{ :class => "control-label", :for => "remediation" } 整改建议
       .controls
@@ -247,7 +247,7 @@
               #{meta_markup(@finding.references)}
     - if !@master
       .control-group
-        %label{ :class => "control-label", :for => "notes" } Notes Data
+        %label{ :class => "control-label", :for => "notes" } 备注：
         %i{:class=>"icon-chevron-down", "data-toggle"=>"collapse", "data-target"=>"#info_2", :id=>"actionButton"}
         .info{ :id => "info_2", :class => "collapse out" }
           %label

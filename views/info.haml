@@ -1,12 +1,12 @@
 .span10
   %form{:method => 'post'}
     %br
-    %h2 咨询信息
+    %h2 个人信息
     %br
     %table
       %tr
         %td
-          顾问名称 &nbsp;
+          姓名 &nbsp;
         %td
           %input{:type => 'text', :name => 'name', :value=> "#{@user.consultant_name}"}
       %tr

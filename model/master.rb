@@ -27,6 +27,7 @@ class TemplateFindings
     property :approved, Boolean, :required => false, :default => true
     property :risk, Integer, :required => false
     property :affected_hosts, String, :length => 20000, :required => false
+    property :risk_assessment, String, :length => 100000, :required => false
 
 end
 
